@@ -1,85 +1,104 @@
 import streamlit as st
 import pandas as pd
 
-# 1. إعدادات الهوية الملكية - نسخة القرن
-st.set_page_config(page_title="SOVEREIGN LEDGER V100", page_icon="⚖️", layout="centered")
+# 1. إعدادات الهوية السيادية - النسخة الصافية
+st.set_page_config(page_title="SOVEREIGN TRUTH LEDGER", page_icon="⚖️", layout="centered")
 
+# 2. واجهة غرفة العمليات (Titanium High-Contrast)
 st.markdown("""
     <style>
-    .stApp { background: radial-gradient(circle at center, #1e293b 0%, #05080a 100%); color: white; }
-    .match-card { background: rgba(255,255,255,0.03); border-left: 5px solid #ffd700; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
-    .score-tag { color: #00ff88; font-weight: 900; font-size: 22px; }
-    .team-name { color: #ffffff; font-size: 16px; font-weight: bold; }
-    
-    /* ستايل الرابط الكاسر للحظر */
-    .master-sync-link {
-        display: block; width: 100%; background: #ffd700; color: #000 !important;
-        text-align: center; padding: 20px; border-radius: 20px;
-        font-weight: 900; text-decoration: none; margin-top: 25px;
-        font-size: 16px; text-transform: uppercase;
-        box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+    .stApp {
+        background: radial-gradient(circle at center, #1e293b 0%, #05080a 100%);
+        color: #ffffff;
     }
+    /* وضوح المؤشرات */
+    div[data-testid="stMetricValue"] {
+        color: #ffffff !important;
+        font-size: 55px !important;
+        font-weight: 900 !important;
+        text-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+    }
+    div[data-testid="stMetricLabel"] p {
+        color: #ffd700 !important;
+        font-size: 16px !important;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    /* كروت المواجهات الحقيقية */
+    .match-card {
+        background: rgba(255, 255, 255, 0.03);
+        border-left: 5px solid #ffd700;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .score-tag { color: #00ff88; font-weight: 900; font-size: 24px; }
+    .team-name { color: #ffffff; font-size: 18px; font-weight: bold; }
+    label { color: #ffd700 !important; font-weight: 900 !important; }
+    #MainMenu, footer, header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
-# 2. جلب الأرشيف الحرفي
+# 3. جلب الأرشيف الحرفي (الناقل الصادق)
 @st.cache_data
-def load_truth_data():
+def load_historical_vault():
     try:
         return pd.read_csv('database.csv')
     except:
         return pd.DataFrame(columns=['date','league','home','away','o1','ox','o2','score','u25'])
 
-df = load_truth_data()
+df = load_historical_vault()
 
-# 3. بناء الواجهة
-st.markdown("<div style='text-align: center; margin-top:20px;'><h1 style='color:#ffd700; font-size:35px; letter-spacing:10px;'>SOVEREIGN</h1><p style='color:#00ff88; font-weight:900;'>V100.0 • UNBLOCKABLE MIRROR</p></div>", unsafe_allow_html=True)
+# 4. بناء الواجهة
+st.markdown("<div style='text-align: center; margin-top:30px;'><h1 style='color:#ffd700; font-size:35px; letter-spacing:10px; margin-bottom:0;'>SOVEREIGN</h1><p style='color:#00ff88; font-weight:900;'>PURE FORENSIC ARCHIVE • V101.0</p></div>", unsafe_allow_html=True)
 
-selected_league = st.selectbox("🎯 مصدر البيانات:", ["tun", "pre", "gen"])
+# اختيار الدوري
+league_options = {"🇹🇳 تونس (LIGUE 1)": "tun", "🏴󠁧󠁢󠁥󠁮󠁧󠁿 إنجلترا (PREMIER)": "pre", "🌍 العالم (GENERAL)": "gen"}
+selected_league = st.selectbox("🎯 حدد خزنة الأرشيف:", list(league_options.keys()))
+lg_code = league_options[selected_league]
 
-# إحداثيات البحث
+# إحداثيات البحث المجهري
+st.markdown("<br>", unsafe_allow_html=True)
 c1, c2, c3 = st.columns(3)
-with c1: o1_in = st.number_input("1", min_value=1.0, value=1.0, step=0.01)
-with c2: ox_in = st.number_input("X", min_value=1.0, value=1.0, step=0.01)
-with c3: o2_in = st.number_input("2", min_value=1.0, value=1.0, step=0.01)
+with c1: o1_in = st.number_input("1 (HOME)", min_value=1.0, value=1.0, step=0.01)
+with c2: ox_in = st.number_input("X (DRAW)", min_value=1.0, value=1.0, step=0.01)
+with c3: o2_in = st.number_input("2 (AWAY)", min_value=1.0, value=1.0, step=0.01)
 
+# 5. محرك الجرد الحقيقي
 if o1_in > 1.01 and ox_in > 1.01 and o2_in > 1.01:
     st.divider()
-    # البحث المجهري الحقيقي (0.01)
+    # الفلترة الحرفية بنطاق 0.01
     results = df[
-        (df['league'] == selected_league) & 
+        (df['league'] == lg_code) & 
         (df['o1'].between(o1_in - 0.01, o1_in + 0.01)) &
         (df['o2'].between(o2_in - 0.01, o2_in + 0.01))
     ]
 
     if not results.empty:
-        st.success(f"✅ تم العثور على {len(results)} مواجهات حقيقية")
+        st.markdown(f"<p style='text-align:center; color:#00ff88; font-weight:900; font-size:18px;'>✅ جرد ناجح: تم العثور على {len(results)} مواجهات تاريخية</p>", unsafe_allow_html=True)
         
-        # عرض النسب
+        # عرض النسب التاريخية الحقيقية
         u25_pct = (results['u25'].sum() / len(results)) * 100
-        st.metric("UNDER 2.5 REALITY", f"{int(u25_pct)}%")
+        m1, m2 = st.columns(2)
+        m1.metric("ARCHIVE U2.5", f"{int(u25_pct)}%")
+        m2.metric("EXACT SAMPLES", len(results))
 
-        st.markdown("### 📂 السجلات التاريخية المكتشفة:")
+        st.markdown("<br><h3 style='color:#ffd700; text-align:center;'>📂 السجلات التاريخية المكتشفة</h3>", unsafe_allow_html=True)
         
-        for index, row in results.iterrows():
+        # سرد المواجهات الحقيقية
+        for _, row in results.iterrows():
             st.markdown(f"""
             <div class='match-card'>
-                <span style='color:#888; font-size:11px;'>{row['date']}</span><br>
-                <span class='team-name'>{row['home']} vs {row['away']}</span><br>
-                <span style='color:#ffd700; font-size:13px;'>Odds: {row['o1']} - {row['ox']} - {row['o2']}</span><br>
+                <span style='color:#888; font-size:12px;'>📅 {row['date']}</span><br>
+                <span class='team-name'>{row['home']} <span style='color:#ffd700;'>vs</span> {row['away']}</span><br>
+                <span style='color:#555; font-size:12px;'>Odds: {row['o1']} - {row['ox']} - {row['o2']}</span><br>
                 <span class='score-tag'>RESULT: {row['score']}</span>
             </div>
             """, unsafe_allow_html=True)
-            
-        # الرابط الذهبي الكاسر للحظر (استخدام target="_top")
-        final_url = f"https://betexplorer.com{o1_in},{ox_in},{o2_in}"
-        st.markdown(f'<a href="{final_url}" target="_top" class="master-sync-link">📡 فتح المصدر الأصلي (تجاوز الحظر)</a>', unsafe_allow_html=True)
-        
     else:
-        st.warning("⚠️ هذا الأودز غير مسجل حالياً في الأرشيف.")
-        final_url = f"https://betexplorer.com{o1_in},{ox_in},{o2_in}"
-        st.markdown(f'<a href="{final_url}" target="_top" class="master-sync-link">🔍 بحث يدوي في BetExplorer</a>', unsafe_allow_html=True)
-
+        st.warning("⚠️ هذا النمط الرقمي لم يسجل له أي مباراة حقيقية في ملف الأرشيف الحالي.")
 else:
-    st.info("أدخل الأرقام الثلاثة لفتح سجلات الحقيقة.")
-    
+    st.markdown("<p style='text-align:center; color:#637381; font-size:14px; margin-top:50px;'>بانتظار إحداثيات (1-X-2) لفتح سجلات الحقيقة.</p>", unsafe_allow_html=True)
+
+st.markdown("<br><br><div style='text-align: center; color: #ffffff; font-size: 10px; font-weight:bold; opacity:0.2;'>PURE FORENSIC LEDGER • NO SYNC LINKS • V101.0</div>", unsafe_allow_html=True)
